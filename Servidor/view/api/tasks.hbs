@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charsert="utf-8">
+        <title>Tasks</title>
+    </head>
+    <body>
+        <ul>
+            {{#each tasks as |task|}}
+                <li>
+                    {{task.id}} - {{task.text}}
+                </li>
+            {{/each}}
+        </ul>
+    </body>
+</html>
