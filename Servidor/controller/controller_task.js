@@ -11,15 +11,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 exports.nuevo = function(request, response){
-  response.setHeader('Content-Type', 'application/json');
+  // response.setHeader('Content-Type', 'application/json');
   if (request.body.text && request.body.done && request.body.date) {
-    if(tasks.length>0){
-      var num = (tasks[tasks.length-1].id);
-    }
-    else{
-      num = 0;
-    }
-    request.body.id = num+1;
+    request.body.id = tasks.length+1;
     request.body.createdAt = new Date();
     request.body.updatedAt = new Date();
     tasks.push(request.body);
@@ -33,15 +27,15 @@ exports.nuevo = function(request, response){
 };
 
 exports.todo = function(request,response){
-    response.setHeader('Content-Type', 'application/json');
+    // response.setHeader('Content-Type', 'application/json');
     response.send(tasks);
 };
 
 exports.getToken = function(request,response){
   response.setHeader('Content-Type', 'application/json');
 
-  var user = request.body.username;
-  var pass = request.body.password;
+  let user = request.body.username;
+  let pass = request.body.password;
 
   let header = {
     alg: "HS256",
@@ -51,12 +45,11 @@ exports.getToken = function(request,response){
   let payload = {
   };
 
-  payload.iat = jsrsasign.jws.IntDate.get('now');
   payload.user = user;
   payload.pass = pass;
+  payload.fechaCreacion = new Date();
 
-  let secret_phrase = pass;
-  let jwt = jsrsasign.jws.JWS.sign("HS256", JSON.stringify(header), JSON.stringify(payload), secret_phrase);
+  let jwt = jsrsasign.jws.JWS.sign("HS256", JSON.stringify(header), JSON.stringify(payload), pass);
 
   jwtJSON = {"token": jwt}
   response.send(jwtJSON);
